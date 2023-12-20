@@ -1,0 +1,66 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[intlimits]{amsmath}
+\usepackage{relsize}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{packages}
+
+
+\usepackage{subfiles} % Best loaded last in the preamble
+
+
+% Setter lengder på parskip og indent
+\setlength{\parskip}{0.2cm}%
+\setlength{\parindent}{0pt}%
+
+% Endrer numereringen på likningene
+\numberwithin{equation}{section}
+
+\renewcommand{\vec}{\textbf} % bold vector font
+
+\title{Computational Electromagnetics}
+\author{Simone Otelie Solstrand, Jonas Gran Melandsør, Wilhelm Sunde Lie, \\ Harald Bjerkeli, Vebjørn Kittlsen Bergh
+\\[1em]
+\small{The Norwegian University of Science and Technology (NTNU)}
+\\
+\footnotesize{Department of Physics}
+\\[1em]
+\textit{\footnotesize{The authors contributed equally to this work}}
+}
+
+\date{\footnotesize\today}
+
+\begin{document}
+\maketitle
+
+%Fikse spacing rundt den datoen; ble fucka da jeg fiksa 1,* tilbake igjen
+
+\begin{center}
+
+\end{center}
+
+%----------------------------------------------------------
+
+
+
+
+%\maketitle
+
+
+\begin{abstract}
+    Slags oppsummering når vi er ferdige
+\end{abstract}
+
+% Her henter vi inn ulike sections; så har vi en ryddig main
+\section{Introduction}
+\subfile{./Sections/theory}
+\subfile{./Sections/numerical}
+\subfile{./Sections/results}
+\subfile{./Sections/discussion}
+
+
+\printbibliography
+% heading=bibintoc, title={Whole bibliography}] %Prints the entire bibliography with the title "Whole bibliography"
+\end{document}
+

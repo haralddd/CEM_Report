@@ -1,0 +1,296 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../Images/}}}
+
+\begin{document}
+
+\section{Theory}
+
+\subsection{Electromagnetic theory and the electromagnetic wave}
+
+Maxwell's equations are the fundamental equations of classical electromagnetism, and in SI-system of units, they take on the form 
+\begin{subequations}
+\begin{align}
+    \nabla \cdot \vec{D} &= \rho_f, 
+    \\ \nabla \times \vec{E} &= -\frac{\partial \vec{B}}{\partial t}, \\
+    \nabla \cdot \vec{B} &= 0, \\
+    \nabla \times \vec{H} &= \vec{J}_f + \frac{\partial \vec{D}}{\partial t},
+\end{align}
+\end{subequations}
+where $\rho_f$ is the free charge density and $\vec{J}_f$ is the free charge current density \cite{Griffiths}. 
+% To find our primary field equations later on, we use what probably is the two most important consequences of Maxwell's equations. These consequences are the wave equations their solutions; otherwise known as electromagnetic waves.
+We consider plane wave equations for the \vec{E}-field, and thus assume a harmonic wave in a source free region. With this, the \vec{H}-field can be eliminated from Maxwell's equations, the result will then be the wave equation for a non-dispersive medium,
+\begin{equation} \label{wavefunc}
+    \nabla ^2E - \frac{\varepsilon\mu}{c^2} \frac{\partial^2E}{\partial t^2} = 0.
+\end{equation}
+
+% In a similar fashion, one could find the wave equation for the \vec{B}-field.
+Solutions to this equation which describe propagating waves must satisfy the dispersion relation
+\begin{equation} \label{eq:dispersion}
+    |\vec{k}|^2 = \epsilon\mu \frac{\omega^2}{c^2},
+\end{equation}
+where $\vec{k}$ is the wave-vector corresponding to a certain wavelength, $|\vec{k}| = 2\pi / \lambda$. This relation results in solutions on the form
+\begin{equation}
+    \vec{E} = \vec{E}_0e^{i\vec{k}\cdot\vec{x}-i\omega t},
+\end{equation}
+where $\vec{E}_0$ is an amplitude constant.
+%It is important to note that a solution to equation %\ref{wavefunc} must also satisfy Gauss's law in order to also be %a solution of Maxwell's equations. 
+We define a basis for the wave vector which is split into a perpendicular and parallel component, $\vec{k} \equiv (k_\perp, k)$. These are defined by the angle $\theta$ in the plane of incidence,
+\begin{equation}
+        k_\perp = |\vec{k}| \sin \theta, \quad k = |\vec{k}| \cos \theta.
+\end{equation}
+By inserting $|\vec{k}|^2$ into \autoref{eq:dispersion}, we see that we can express $k_\perp$ as a function in terms of $k$ and $\omega$,
+\begin{equation}
+     \alpha(k,\omega) \equiv k_\perp  = \sqrt{\varepsilon\mu \frac{\omega^2}{c^2} - k^2},
+\end{equation}
+where $\alpha(k,\omega)$ is introduced to make the clear distinction between function and free parameters.
+Consequently, the values of $\varepsilon, \mu$ and $k$ will decide if $\alpha$ is purely real, purely imaginary or complex. If $\alpha$ is purely imaginary, the solution to the wave equation exponentially decay in the $x_3$ direction; an evanescent wave. This will be discussed in more detail later. 
+
+% snakke om boundary conditions i EM
+\subsubsection{Boundary conditions}
+For a medium that extends to infinity in all directions, Maxwell's equations gives us all the information we need. However, no real media will extend to infinity in all directions, and one must take into account how the field vectors will behave at the boundary between two different media of different electromagnetic properties. This is found in many books on electromagnetism \cite{Griffiths}, and the result is 
+\begin{equation} \label{BC1}
+    \hat{\textbf{n}} \cdot (\textbf{B}_- -\textbf{B}_+) = 0
+\end{equation}
+\begin{equation}\label{BC2}
+    \hat{\textbf{n}} \cdot (\textbf{D}_- -\textbf{D}_+) = \rho_s
+\end{equation}
+\begin{equation}\label{BC3}
+    \hat{\textbf{n}} \times (\textbf{E}_- -\textbf{E}_+) = 0
+\end{equation}
+\begin{equation}\label{BC4}
+    \hat{\textbf{n}} \times (\textbf{H}_- -\textbf{H}_+) = J_s
+\end{equation}
+where the subscripts $+$ and $-$ are referring to the fields in the upper and lower medium, respectively. $\rho_s$ and $J_s$ are the surface charge density and the surface current density. 
+
+Furthermore, the randomly rough surfaces discussed in this paper are effectively one dimensional. This implies that the surface profile $\zeta(x_1,x_2)$ of the randomly rough surfaces does not depend explicitly on $x_2$, and can therefore be defined as $x_3 = \zeta{(x_1)}$. Using this one-dimensional rewrite, the boundary conditions in equations (\ref{BC1} - \ref{BC4}) can be simplified to 
+
+\begin{align}
+    \Phi^{+}_\nu\left(x_1,x_3^+\middle|\omega\right) &= \Phi^{-}_\nu(x_1,x_3^- | \omega),\\
+    \frac{1}{\kappa^{+}_\nu(\omega)}\partial_n\Phi^{+}_\nu(x_1,x_3^+ | \omega) &= \frac{1}{\kappa^{-}_\nu(\omega)}\partial_n\Phi^{-}_\nu(x_1,x_3^- | \omega),
+\end{align}
+    as $x_3^\pm \rightarrow \zeta(x_1)$ from above ($+$) and below ($-$).
+Where $\kappa^\pm_\nu(\omega)$ is defined as:
+\begin{equation}
+    \kappa^\pm_\nu(\omega) = 
+    \begin{cases}
+      \varepsilon_\pm (\omega),\quad & \nu = p\\
+      \mu_{\pm} (\omega), \quad & \nu = s\\
+    \end{cases}
+\end{equation}
+
+% Introduce primary field, having introduced material + and -
+
+\subsection{Scattered field and geometry}
+
+\subsubsection{Scattering geometry}
+
+Rough surfaces are often characterized by the following statistical properties,
+\begin{subequations}
+\begin{align}
+    \left\langle \zeta(x_1)\right\rangle &= 0, \\
+    \left\langle \zeta(x_1)\zeta(x_1')\right\rangle &= \delta^2 W(|x_1 - x_1'|),
+\end{align}
+\end{subequations}
+
+where $\delta$ is the root-mean-square (RMS) height of the surface and $W(\Delta x)$ is the spatial correlation between the surface heights. Thus this describes a surface varying around $x_3=0$ with $W$ defining the covariance between neighbouring points. A common choice, which is often seen in material is Gaussian correlation, defined by
+
+\begin{equation} \label{eq:gauss_corr}
+    W(|x_1|) = \exp\left(-\frac{x_1^2}{a^2}\right).
+\end{equation}
+
+\subsubsection{Primary field equations}
+In this paper the incident wave will be described by a plane wave on the form $\Phi^{inc}_\nu = e^{ikx_1-i\alpha_0(k,\omega)x_3}$. To describe incoming light from the material  which is reflected and transmitted into the material one describes the three different light rays by different wave vectors. These wave vectors are then decomposed, where the parallel components can describe a wave equation. We denote this parallel incoming wave vector by $k_\parallel \equiv k$ while the perpendicular is given by $k_\perp \equiv \alpha_+$, which gives the following definition of $\alpha_+$ as a function of $k$ and the angular frequency $\omega$:
+\begin{equation}
+    \alpha_0(k, \omega) = 
+    \begin{cases} \sqrt{\epsilon_+ \mu_+ \frac{\omega^2}{c^2} - k^2}, & \mbox{if } |k|<\frac{\omega}{c} \\ 
+    i\sqrt{k^2 - \epsilon_+ \mu_+ \frac{\omega^2}{c^2}}, & \mbox{if } |k| > \frac{\omega}{c}\end{cases}.
+\label{alpha_plus}
+\end{equation}
+
+
+The same notation can be used for the reflected wave q giving its perpendicular component $\alpha \equiv \alpha_+(q, \omega)$, and for the transmitted wave there is $p_\perp \equiv \alpha_-(p, \omega)$ which instead uses $\mu_-$ and $\epsilon_-$. These incoming and reflected waves can then also be described by their angle by the expressions: 
+\begin{equation}
+    k = \frac{\omega}{c}\sin \theta_0,
+\label{k_by_angle}
+\end{equation}
+\begin{equation}
+    q = \frac{\omega}{c}\sin \theta_s.
+\label{q_by_angle}
+\end{equation}
+Note that we have chosen to denote the field above the surface with (+) and the field below the surface with (-). The wave vectors are a combination of electric and magnetic waves, where the light is assumed either p-polarized or s-polarized in order to only need to describe the fields in the $x_2$ direction:
+
+\begin{equation}
+  \Phi_{\nu}^{\pm}\left(x_1, x_3|\omega \right) =
+    \begin{cases}
+      H_2\left(x_1, x_3|\omega \right), \hspace{2mm} \nu = p\\
+      E_2\left(x_1, x_3|\omega \right), \hspace{2mm} \nu = s,\\
+    \end{cases}   
+\label{primary_field_over_def}
+\end{equation}
+
+where the $\phi_{\nu}^{\pm}$ denotes the primary field equations for the material plus and minus respectively. Where in the material plus, you have that the total field is the sum of the incident wave and reflected wave, which can be written on the form:
+
+%\begin{equation*}
+%    \Phi_{\nu}^{+}\left(x_1, x_3|\omega \right) = %\Phi_{\nu}^{inc}\left(x_1, x_3|\omega \right) + %\Phi_{\nu}^{ref}\left(x_1, x_3|\omega \right)
+%\end{equation*}
+
+\begin{equation}
+    \Phi_{\nu}^{+}\left(x_1, x_3|\omega \right) = e^{ikx_1 - i\alpha_0\left(k,\omega \right)\zeta\left(x_1 \right)} + \int_{-\infty}^{\infty}\frac{dq}{2 \pi} R_{\nu}\left(q|k \right)e^{iqx_1+i\alpha_0\left(q,\omega \right)\zeta\left(x_1 \right)}.
+\label{primary_field_plus}
+\end{equation}
+Similarly for the material minus you only have the transmitted wave vector which can be described by:
+
+%\begin{equation*}
+%    \Phi_{\nu}^{-}\left(x_1, x_3|\omega \right) = %\Phi_{\nu}^{tra}\left(x_1, x_3|\omega \right)
+%\end{equation*}
+
+\begin{equation}
+    \Phi_{\nu}^{-}\left(x_1, x_3|\omega \right) = \int_{-\infty}^{\infty}\frac{dp}{2 \pi} T_{\nu}\left(p|k \right)e^{ipx_1-i\alpha_-\left(p,\omega \right)\zeta\left(x_1 \right)}.
+\label{primary_field_minus}
+\end{equation}
+
+
+
+\subsection{Derivation of the reduced Rayleigh equations}
+\subsubsection{Rayleigh hypothesis}
+
+The total field above and below the surface are given by the asymptotic expressions in Eq. \ref{primary_field_plus} and Eq. \ref{primary_field_minus}. However, in order to satisfy the boundary conditions at the randomly rough surface we need to know what the total fields looks like in the region min$\zeta(x_1) < \zeta(x) < $ max$\zeta(x_1)$. In this area Eq. \ref{primary_field_minus} and Eq. \ref{primary_field_plus} fail to describe the total fields due to not taking the downward propagating scattering  modes (nor upwards propagating transmitted modes) into account. However, these expressions can become good approximations for the total fields nevertheless; this is Rayleighs hypothesis \cite{Rayleigh1907, Voronovich}.
+
+One can easily understand that waves which are still propagating towards the scattering surface after having interacted with it already must interact with it at least once more before leaving. If the surface is rather rough, then these downward propagating scattering waves will occur more often, and these waves will give an essential contribution to the scattered light. 
+But, if the surface is just slightly rough, these waves will not occur just as often, and therefore they have a smaller impact on the total field.
+But, what exactly is "smooth enough"? There have been several studies devoted to this \cite{Watanabe, Voronovich, Tishchenko:09}, but it remains to find an absolute limit of validity for Rayleighs hypothesis. However, it seems to be a consensus on  the Rayleigh hypothesis being valid when 
+
+\begin{equation}
+    \frac{\delta}{a} << 1,
+\end{equation}
+where $\delta$ is the rms-height, and $a$ is the correlation length of the surface \cite{Simonsen2010}. In other words, the correlation length of the surface should be substantially bigger than the rms-height. So, it is not the amplitude that needs to be small, but its slope. 
+
+\subsubsection{Rayleigh equations}
+We have that the primary field equations are valid for the regions outside the limits of the surface:
+\begin{align*}
+    x_3 > \max_{x_1}\zeta(x_1) && x_3 < \min_{x_1}\zeta(x_1) 
+\end{align*} 
+
+
+Then for the purpose of finding the transmission coefficient $T_{\nu}$ and reflection coefficient $R_{\nu}$, we can assume that the primary field equations also are valid infinitesimally close to the surface. By using the Rayleigh hypothesis we can use the boundary conditions to get: 
+\begin{equation}
+    \Phi_{\nu}^+\left(x_1, x_3|\omega \right) |_{x_3=\zeta(x_1)} = \Phi_{\nu}^-\left(x_1, x_3|\omega \right) |_{x_3=\zeta(x_1)}
+\label{cont_primary_field}
+\end{equation}
+\begin{equation*}
+    \frac{1}{\kappa_{\nu}^+(\omega)}\partial_n\Phi_{\nu}^+\left(x_1, x_3|\omega \right) |_{x_3=\zeta(x_1)} = \frac{1}{\kappa_{\nu}^-(\omega)}\partial_n\Phi_{\nu}^-\left(x_1, x_3|\omega \right) |_{x_3=\zeta(x_1)}
+\end{equation*}
+
+\begin{equation}
+    \partial_n\Phi_{\nu}^+\left(x_1, x_3|\omega \right) |_{x_3=\zeta(x_1)} = \frac{1}{\kappa_{\nu}(\omega)}\partial_n\Phi_{\nu}^-\left(x_1, x_3|\omega \right) |_{x_3=\zeta(x_1)}
+\label{cont_normal_derivative_primary_field}
+\end{equation}
+Where $\kappa_{\nu}(\omega) = \frac{\kappa_{\nu}^-(\omega)}{\kappa_{\nu}^+(\omega)}$. The result is after inserting the primary field equations into Eq. (\ref{cont_primary_field}) that:
+\begin{equation}
+    e^{ikx_1 - i \alpha_+(k,\omega)x_3} + \int_{-\infty}^{\infty}\frac{dq}{2\pi} R_{\nu} e^{iqx_1+i\alpha_+(q,\omega)x_3} = \int_{-\infty}^{\infty}\frac{dp}{2\pi} T_{\nu} e^{ipx_1-i\alpha_-(p,\omega)x_3}
+\end{equation}
+It is of interest to describe the incoming wave by the continuous $\delta$-distribution to get the following equation. Simultaneously one can use the same integration variable for both sides of the equation.
+\begin{equation}
+    \int_{-\infty}^{\infty}\frac{dq}{2\pi} e^{iqx_1}[2\pi\delta(q-k)e^{-i\alpha_+(q, \omega)\zeta(x_1)} + R_{\nu} e^{i\alpha_+(q,\omega)\zeta(x_1)}] = \int_{-\infty}^{\infty}\frac{dq}{2\pi} T_{\nu} e^{i q x_1-i\alpha_-(q,\omega)\zeta(x_1)}
+\label{Cont_with_delta_rep}
+\end{equation}
+Applying the same description of the incoming wave for Eq. (\ref{cont_normal_derivative_primary_field}), one gets a similar expression for the normal derivatives.
+\begin{equation}
+\label{Cont_normal_with_delta_rep}
+\begin{split}
+    \int_{-\infty}^{\infty}\frac{dq}{2\pi} e^{iqx_1}[-2\pi\delta(q-k)\{ \zeta'(x_1)q + \alpha_+(q, \omega) \}e^{-i\alpha_+(q, \omega)\zeta(x_1)} \\
+    + R_{\nu}(q|k)\{-\zeta'(x_1)q+\alpha_+(q, \omega) \} e^{i\alpha_+(q,\omega)\zeta(x_1)}] \\
+    = -\frac{1}{\kappa_{\nu}(\omega)}\int_{-\infty}^{\infty}\frac{dq}{2\pi} T_{\nu}(q|k)\{\zeta'(x_1)q+\alpha_-(q, \omega) \} e^{i q x_1-i\alpha_-(q,\omega)\zeta(x_1)}
+\end{split}
+\end{equation}
+
+\subsubsection{Reduced Rayleigh equations}
+By doing some mathematical operations one can decouple the Rayleigh equations by eliminating either the reflection term or the transmission term \cite{BROWN1984}. This is done, as seen in refs. \cite{Maradudinredray,FREILIKHER1997}, by multiplying Eq. \ref{Cont_with_delta_rep} with $e^{-ipx_1 - i\alpha(p,\omega)\zeta(x_1)}[-\zeta'(x_1)p + \alpha(p,\omega)]$ and Eq. \ref{Cont_normal_with_delta_rep} by $\kappa_\nu(\omega)e^{-ipx_1-i\alpha(p,\omega)\zeta(x_1)}$. By adding these results and integrating over $x_1$ one sees that the terms which contains the transmission amplitude vanish. 
+
+The result is the \textit{reduced Rayleigh equations}; one single integral equation which is dependent on either the reflection amplitude or the transmission amplitude. The reduced Rayleigh equation for reflection is given by \cite{Simonsen2010}
+
+\begin{equation} \label{eq:RRE}
+    \int_{-\infty}^\infty \frac{dq}{2\pi}M_{\nu}^{+}(p|q)R_{\nu}(p|k) = M_{\nu}^{-}(p|k),
+\end{equation}
+
+where 
+\begin{equation} \label{eq:M}
+    M_{\nu}^{\pm}(p|q) = \pm \left[ \frac{(p + \kappa_{\nu}(\omega)q)(p-q)}{\alpha(p,\omega)\mp\alpha_0(q,\omega)} + \alpha(p,\omega) \pm \kappa_{\nu}(\omega)\alpha_0(q,\omega)\right] I(\alpha(p,\omega) \mp \alpha_0(q,\omega)|p-q),
+\end{equation}
+with 
+\begin{equation} \label{I_integral}
+    I(\gamma|q) = \int_{-\infty}^\infty dx_1 e^{-i\gamma\zeta(x_1)}e^{-iqx_1}.
+\end{equation}
+
+However, this can be simplified even further if we restrict ourselves to either p-polarization or s-polarization. By calculation one finds 
+
+\begin{equation} \label{rayleighred_p_pol}
+\int\frac{dq}{2\pi}N_p^+(p|q)R_p(q|k) = N_p^-(p|k)
+\end{equation}
+where 
+\begin{equation}
+    N_p^{\pm}(p|q) = \pm \frac{pq \pm \alpha(p,\omega)\alpha_0(q,\omega)}{\alpha(p,\omega)\mp \alpha_0(q,\omega)}I(\alpha(p,\omega) \mp \alpha_0(q,\omega)|p-q)
+\end{equation}
+for p-polarization. For s-polarization one finds
+\begin{equation}\label{rayleighred_s_pol}
+    \int\frac{dq}{2\pi}N_s^+(p|q)R_s(q|k) = N_s^-(p|k)
+\end{equation}
+where
+\begin{equation}
+    N_s^{\pm}(p|q) = \pm \frac{1}{\alpha(p,\omega)\mp \alpha_0(q,\omega)}I(\alpha(p,\omega) \mp \alpha_0(q,\omega)|p-q).
+\end{equation}
+
+\subsubsection{Mean differential reflection and transmission coefficients}
+Experimentally, we cannot directly measure the amplitudes $R_\nu$ and $T_\nu$. This is a problem seeing as we would like to compare the theoretical predictions with experimental measurements. However, these amplitudes are related to another physically measurable quantity; the mean differential reflection and transmission coefficients  $\langle \frac{\partial R_\nu}{\partial \theta_s} \rangle$, $\langle \frac{\partial T_\nu}{\partial \theta_s} \rangle$ \cite{MARADUDIN1990,Simonsen2010}. The mean differential reflection coefficient is defined as the total incident flux which is scattered into an angular interval of width $\partial \theta_s$ around the scattering direction $\theta_s$.
+
+To obtain an expression for the mean differential reflection coefficient for a plane wave one must find the power incident to the rough surface, $P_{inc}$, and the power scattered from it, $P_{sc}$. For a plane wave they are defined as
+\begin{equation}
+    \frac{\partial R_\nu}{\partial \theta_s} = \frac{p_{sc}(\theta_s)}{P_{inc}},
+\end{equation}
+where 
+\begin{equation}
+    P_{inc} = \frac{L_1 L_2}{2}\cdot\frac{c^2}{\omega}\alpha_0(k,\omega),
+\end{equation}
+and 
+\begin{equation}
+\begin{array}{cc}
+    P_{sc} = \frac{L_2}{2}\cdot\frac{c^2}{\omega} \int_{-\pi/2}^{\pi/2} d\theta_s p_{sc}(\theta_s) \\
+    p_{sc}(\theta_s) = \frac{L_2}{4\pi}\omega \cdot \cos^2\theta_s |R_\nu(q|k)|^2.
+\end{array}
+\end{equation}
+Therefore the differential reflection coefficient for a plane wave is given by
+\begin{equation}
+    \frac{\partial R_\nu}{\partial \theta_s} = \frac{p_{sc}(\theta_s)}{P_{inc}} = \frac{1}{L_1}\frac{\omega}{2\pi c}\frac{\cos^2(\theta_s)}{\theta_0}|R_\nu(q|k)|^2,
+\end{equation}
+where \textit{k} and \textit{q} are related to the incident angle $\theta_0$ and the scattered angle $\theta_s$ by $k = \frac{\omega}{c}\sin(\theta_0)$ and $q = \frac{\omega}{c}\cos(\theta_s)$.
+
+However, we are not interested in the differential reflection coefficient from only one realization, but instead we wish to look at the mean of this quantity. This is done by making a mean average over an ensemble of realizations. By doing this we obtain the \textit{mean} differential reflection coefficient;
+\begin{equation} \label{MDRC}
+    \left\langle \frac{\partial R_\nu}{\partial \theta_s} \right\rangle =  \frac{1}{L_1}\frac{\omega}{2\pi c}\frac{\cos^2(\theta_s)}{\cos\theta_0} \langle |R_\nu(q|k)|^2 \rangle.
+\end{equation}
+
+To find the equivalent expression for the mean differential transmission coefficient one has to calculate $\langle \frac{\partial T_\nu}{\partial \theta_s}\rangle = \langle \frac{p_{tr}(\theta_t}{P_{inc}}\rangle$. The result shows that $\langle \frac{\partial T_\nu}{\partial \theta_s}\rangle$ is also found by substituting $T_\nu(q|k)$ for $R_\nu(q|k)$, and then multiplying the expression by $\sqrt{\epsilon\mu}$ \cite{MaradudinSanchez1995}.
+
+This equation can be divided into a coherent and an incoherent part. This is because when light is scattered from a random rough surface two scattering processes normally occur; coherent and incoherent (or specular and diffuse) scattering \cite{Simonsen2010}. These coefficients are given by
+\begin{equation}
+\begin{array}{cc}
+    \langle \frac{\partial R_\nu}{\partial \theta_s}\rangle_{incoh} =  \frac{1}{L_1}\frac{\omega}{2\pi c}\frac{\cos^2(\theta_s)}{\cos\theta_0} [\langle |R_\nu(q|k)|^2 \rangle - \langle |R_\nu(q|k)|^2\rangle],
+    \\
+    \langle \frac{\partial R_\nu}{\partial \theta_s}\rangle_{coh} =  \frac{1}{L_1}\frac{\omega}{2\pi c}\frac{\cos^2(\theta_s)}{\cos\theta_0} |\langle R_\nu(q|k)\rangle|^2.
+\end{array}
+\end{equation}
+To find the equivalent expression for the mean differential transmission coefficient one has to calculate $\langle \frac{\partial T_\nu}{\partial \theta_s}\rangle = \langle \frac{p_{tr}(\theta_t}{P_{inc}}\rangle$. The result shows that $\langle \frac{\partial T_\nu}{\partial \theta_s}\rangle$ is also found by substituting $T_\nu(q|k)$ for $R_\nu(q|k)$, and then multiplying the expression by $\sqrt{\epsilon\mu}$. 
+
+\subsection{Surface plasmon polaritons and surface magnon polaritons}
+When a material is exposed to radiation, an electromagnetic wave may propagate through the material and excite the internal degrees for freedom of the medium \cite{D.L.Mills_1974}. This forms a quasi-particle called polariton, which can couple to different excitations in the material, such as plasmons and magnons \cite{HOOPER201437}. Plasmons are the excitation quantum for collective valence electron oscillations, while magnons are the quantum for excitation of spin waves \cite{Pines1961}.
+
+
+
+In this paper only the coupling of the electric field to a plasmon and the magnetic field to a magnon will be considered. 
+
+In a metal the electric field will excite electrons creating oscillations in the charge density, which may give rise to an electric dipole moment which again can couple to the electric field, enhancing 
+
+These polartions may couple to the EM modes of the incoming field and produce oscillations in the materials structure. 
+
+
+\end{document}
