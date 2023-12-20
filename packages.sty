@@ -25,8 +25,6 @@
 }
 
 % --- Bibliography & References---  
-
-
 \usepackage{biblatex}
 
 \addbibresource{references.bib}
@@ -38,7 +36,7 @@
 \newcommand{\source}[1]{\vspace{-4pt} \caption*{\hfill \footnotesize{Source: {#1}} } }   % Easily insert sources in images
 
 % --- Code ---
-\usepackage{minted} % Includes several programming languages and styles, visit --https://www.ntnu.no/wiki/display/imtsoftware/Code+in+LaTeX-- for more information and examples
+% \usepackage{minted} % Includes several programming languages and styles, visit --https://www.ntnu.no/wiki/display/imtsoftware/Code+in+LaTeX-- for more information and examples
 
 % --- Front matter ---
 % Front matter is located before the table of contents, e.g. preface (Norsk: forord) and often has separate settings
@@ -47,7 +45,7 @@
 }
 
 % --- General ---
-\usepackage{import}     % Enable importing of sections
+% \usepackage{import}     % Enable importing of sections
 \usepackage{csquotes}   % Provides international handling of quote marks. Especially useful for bibliography management using BibLaTeX
 \usepackage{hyperref}   % Hyper-references, possible to change color
 \hypersetup{    % Color of hyper-references
@@ -70,6 +68,7 @@
 \usepackage[
 singlelinecheck=false % <-- important
 ]{caption}
+
 % --- Language ---
 \usepackage{siunitx}    % Enable SI units
 \usepackage[english]{babel}     % Defining UK English as language. This will among other things ensure that dates are displayed as 24/03/1997 rather than 03/24/1997 in the bibliography.
@@ -103,6 +102,8 @@ singlelinecheck=false % <-- important
 \usepackage{amsthm}     % Helps define theorem-like structures
 \usepackage{textcomp}   % Used in the package "gensymb" (below), which will give warnings if "textcomp" is not imported in advance
 \usepackage{gensymb}    % Adds extra generic symbols for math and text mode, e.g. \degree
+\usepackage{relsize}
+\usepackage{amsfonts}
 
 % --- Page setup ---
 \usepackage[a4paper, total={160mm, 245mm,footskip = 14mm}]{geometry}

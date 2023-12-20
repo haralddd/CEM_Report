@@ -3,54 +3,107 @@
 
 \begin{document}
 \section{Numerical method}
+The numerical approach of solving the reduced Rayleigh 
+equation consists of discretizing the coordinates in both $x_1$
+and its reciprocal space, spanned by $(p,q)$.
+Additionally, approximative measures are taken to reduce the computational loads 
+from calculating an infinite number of modes in \autoref{eq:RRE} and 
+the integral function \autoref{I_integral}.
+After this is done, 
+the Reduced Rayleigh equation can simply be solved as a linear system of equations.
 
 
 \subsection{Discretization}
-To solve the Reduced Rayleigh equations numerically, we discretize the coordinate spaces. Since the $q$-integral in \autoref{eq:RRE} spans an infinite range, we consider that the wavenumber values above $\omega/c$ represent rapidly decaying evanescent waves. Thus we choose to truncate the integral,
+Since the $q$-integral in \autoref{eq:RRE} spans an infinite range, 
+we consider that the wavenumber values above $\omega/c$ 
+represent rapidly decaying evanescent waves, 
+since $\alpha_0$ turns purely imaginary.
+Based on this we choose to truncate the integral bounds at $Q/2$,
 \begin{equation}
     \mathlarger{\mathlarger{\int}}^{\frac{Q}{2}}_{-\frac{Q}{2}} \frac{dq}{2\pi} M_\nu^+(p|q)R(q|k) = M_\nu^-(p|k),
 \end{equation}
-where $Q$ is a sufficiently large multiple of $2\omega/c$. The discretization of $q$ and $p$ is then defined by 
+where $Q$ is a sufficiently large multiple of $2\omega/c$, 
+dependent on how many significant evanescent modes is needed for accurate results. 
+The discretization of $q$ and $p$ is then defined by 
 \begin{alignat*}{2}
     q \longrightarrow&\ q_n = nh_q - Q/2,\quad &n = 0,1,...,N_q\\
     p \longrightarrow&\ p_m = mh_q - Q/2,\quad &m = 0,1,...,N_q
 \end{alignat*}
-where $h_q = Q/N_q$, such that $-Q \leq p_m - q_n \leq Q$. The truncated integral expression can be discretized as a quadrature sum
+where $h_q = Q/N_q$, such that $-Q \leq p_m - q_n \leq Q$. 
+The truncated integral expression can be discretized as a quadrature sum
 \begin{equation} \label{eq:discrete_RRE}
-    \frac{h_q}{2\pi} \mathlarger{\sum^{N_q}_{n=0}} M_\nu^+(p_m|q_n)R(q_n|k) = M_\nu^-(p_m|k),
+    \frac{h_q}{2\pi} \sum^{N_q}_{n=0}
+    M_\nu^+(p_m|q_n)R(q_n|k) = M_\nu^-(p_m|k),
 \end{equation}
-where we have taken all weights equal to one. This defines a system of $N_q$ linear equations, but it remains to discretize the surface coordinates as well as handle the integral $I(\gamma|q)$ defined in \autoref{I_integral}. This integral is effectively a Fourier transform at each point $p_m$. To avoid calculating $N_q$ Fourier transformations at each numerical step, we rewrite the exponential as an infinite series
+where we have taken all quadrature weights equal to one. 
+This defines a system of $N_q$ linear equations, 
+but it remains to discretize the surface coordinates 
+and handle the integral $I(\gamma|q)$ defined in \autoref{I_integral}. 
+Discretizing this integral term results in a discrete Fourier transform at each point $p_m$. 
+To avoid calculating $N_q$ Fourier transformations at each surface realization, 
+we rewrite the exponential as an infinite sum
 \begin{equation*}
-    I(\gamma|\Tilde{q}) = \int_{-\infty}^{\infty}dx_1 e^{i\gamma\zeta(x_1)} e^{-i\Tilde{q}x_1} = \int_{-\infty}^{\infty}dx_1 e^{-i\Tilde{q}x_1}\sum_{j=0}^{\infty} \frac{ \left[i\gamma\zeta(x_1) \right]^j}{ j! }.
+    I(\gamma|\Tilde{q}) = \int_{-\infty}^{\infty}dx_1 
+        e^{i\gamma\zeta(x_1)} e^{-i\Tilde{q}x_1}
+            = \int_{-\infty}^{\infty}dx_1 
+            e^{-i\Tilde{q}x_1}
+            \sum_{j=0}^{\infty}
+                \frac{ \left[i\gamma\zeta(x_1) \right]^j}{ j! },
 \end{equation*}
-Since this sum is convergent, we can exchange the integral and summation, making the expression equivalent to
+and since the sum is convergent, 
+we can exchange the integral and summation, 
+making the expression equivalent to
 \begin{equation}\label{eq:I_expanded}
     I(\gamma | \Tilde{q}) = \sum_{j=0}^\infty \frac{ \left[i\gamma\right]^j}{j!}\mathcal{F}\left\{\zeta^j(x_1)\right\}
 \end{equation}
 
-where $\mathcal{F}$ denotes the Fourier transform from $x_1$ to $\Tilde{q}$. The series is then truncated at a term $N_j$ to limit the number of required Fourier transforms in the simulation. The truncation error is highly dependent on the roughness of the surface, but for a rough surface ensemble with Gaussian autocorrelation.
+where $\mathcal{F}$ denotes the Fourier transform from $x_1$ to $\Tilde{q}$. 
+The sum is then truncated at an upper limit $N_j$ 
+to reduce the number of required Fourier transforms per surface realization. 
+The truncation error of this approximation 
+is highly dependent on the roughness of the surface.
 
-To find a suitable discretization for $x_1$ we consider that the integral and its parameters takes the form $I(\alpha(p,\omega) - \alpha_0(q,\omega) | p_m - q_n)$, requiring that the discretization of $x_1$ should be able to resolve $-Q \leq p_m - q_n \leq Q$ for all $m$ and $n$, which requires $N_x \geq 2N_q$, where we take $N_x = 2N_q$ for simplicity. Truncating the surface length at $L$ then gives the discretization
+The integral and its parameters take the form $I(\alpha(p,\omega) - \alpha_0(q,\omega) | p_m - q_n)$, 
+imposing a requirement on the discretization of $x_1$ due to the Fourier transform in \autoref{eq:I_expanded}. 
+The discrete Fourier transform must be able to resolve $-Q \leq p_m - q_n \leq Q$ for all $m$ and $n$. 
+This indicates the requirement $N_x \geq 2N_q$, where we take $N_x = 2N_q$ for simplicity. 
+Truncating the surface length at $L$ then gives the discretization
 \begin{equation}
     x_1 \longrightarrow x_\ell = \ell h_x - L/2,\quad \ell = 0,1,...,2N_q,
 \end{equation}
-where $h_x = L/2N_q$.
+where $h_x = L/2N_q$. 
+The truncation of the surface length results in a discrete Fourier transform
+which represents a periodically repeating surface.
+From this it is possible to observe boundary effects 
+which do not represent the properties of the generated surface.
+This is comes into play on especially rough surfaces,
+as an increase in propagating surface waves can couple to an anomalous surface effects.
 
-\begin{equation}
-    I(\gamma|\hat{Q}) = \int_{-\infty}^{\infty} dx_1 e^{i\gamma\zeta(x_1)} e^{-i\hat{Q}x_1}; \; \hat{Q} \in \{-Q, -Q+h_q, .\: .\: .\: , Q-h_q,  Q \}
-\end{equation}
+% \begin{equation}
+%     I(\gamma|\hat{Q}) = \int_{-\infty}^{\infty} dx_1 e^{i\gamma\zeta(x_1)} e^{-i\hat{Q}x_1}; \; \hat{Q} \in \{-Q, -Q+h_q, .\: .\: .\: , Q-h_q,  Q \}
+% \end{equation}
 
 
 \subsection{Surface sample generation}
-A method for generating randomly rough surfaces is Fourier filtering, which consist of drawing a random sample and using a convolution filter by means of Fourier transforms to get the wanted surface characteristics. This is a very convenient approach, especially when considering Gaussian rough surfaces, as the central limit theorem does not affect the wanted characteristics of the surface.
+A straightforward method for generating randomly rough surfaces is Fourier filtering, 
+which consist of drawing a random sample and filtering
+it with the surface autocorrelation function.
+This is a very convenient approach, 
+especially when considering Gaussian rough surfaces, 
+as the central limit theorem does not affect the wanted characteristics of the surface.
 
-The generation of surface points is defined by using \autoref{eq:gauss_corr} for the discrete formula
+The generation of $N_x$ surface points $\zeta_\ell$ can then be created by
 \begin{equation}
-    \zeta_n = \mathcal{F}^{-1} \left(\mathcal{F} S_n \cdot \sqrt{\mathcal{F} W(x_n)}\right),\quad n = 0,1,...,N_x
+    \zeta_\ell = \mathcal{F}^{-1} \left(\mathcal{F} S_\ell \cdot \sqrt{\mathcal{F} W(x_\ell)}\right),\quad n = 0,1,...,N_x
 \end{equation}
-where $S_n$ is an independent sample from the standard normal distribution, $\mathcal{N}(0,1)$, $\mathcal{F}$ is the discrete Fourier transform and $x_n$ are discretized $x$-coordinates.
+where $S_\ell$ is an independent sample from the standard normal distribution, 
+$\mathcal{N}(0,1)$, and $\mathcal{F}$ is the discrete Fourier transform.
+The autocorrelation function $W(|x|)$ is defined in \autoref{eq:gauss_corr}.
+
+\subsection{Numerical reflection coefficient}
 
 
+\subsection{Normalization}
 
 \subsection{Solving the reduced Rayleigh equation}
 
@@ -75,35 +128,35 @@ where $q_n = nh_q, \; -\frac{N_q}{2} \leq n \leq \frac{N_q}{2}, \; h_q = \frac{Q
 
 or written out, where the indices $\left(m, n \right)$ for $\left(p_m, q_n \right)$ are used:
 
-\hspace{-1cm} \begin{equation}
-    \frac{h_q}{2\pi}
-    \begin{bmatrix}
-    M^+_{\nu({-\frac{N_q}{2}}, {-\frac{N_q}{2}})} & M^+_{\nu({-\frac{N_q}{2}},{-\frac{N_q}{2}+1})} & . & . & . & M^+_{\nu({-\frac{N_q}{2}}, {\frac{N_q}{2}})}\\
-    M^+_{\nu({-\frac{N_q}{2}+1}, {-\frac{N_q}{2}})} & M^+_{\nu({-\frac{N_q}{2}+1},{-\frac{N_q}{2}+1})} & . & . & . & M^+_{\nu({-\frac{N_q}{2}+1}, {\frac{N_q}{2}})}\\
-    . & . & . &  &  & . \\
-    . & . &  & . &  & . \\
-    . & . &  &  & . & . \\
-    M^+_{\nu({\frac{N_q}{2}}, {-\frac{N_q}{2}})} & M^+_{\nu({\frac{N_q}{2}},{-\frac{N_q}{2}+1})} & . & . & . & M^+_{\nu({\frac{N_q}{2}}, {\frac{N_q}{2}})}\\
-    \end{bmatrix}
-    \begin{bmatrix}
-        R_{(-\frac{N_q}{2},k)}\\
-        R_{(-\frac{N_q}{2}+1,k)}\\
-        .\\
-        .\\
-        .\\
-        R_{(\frac{N_q}{2},k)}\\
-    \end{bmatrix}
-    =
-    \begin{bmatrix}
-        M^-_{\nu(-\frac{N_q}{2},k)}\\
-        M^-_{\nu(-\frac{N_q}{2}+1,k)}\\
-        .\\
-        .\\
-        .\\
-        M^-_{\nu(\frac{N_q}{2},k)}\\
-    \end{bmatrix}
-\label{R_Matrix_equation}
-\end{equation}
+% \hspace{-1cm} \begin{equation}
+%     \frac{h_q}{2\pi}
+%     \begin{bmatrix}
+%     M^+_{\nu({-\frac{N_q}{2}}, {-\frac{N_q}{2}})} & M^+_{\nu({-\frac{N_q}{2}},{-\frac{N_q}{2}+1})} & . & . & . & M^+_{\nu({-\frac{N_q}{2}}, {\frac{N_q}{2}})}\\
+%     M^+_{\nu({-\frac{N_q}{2}+1}, {-\frac{N_q}{2}})} & M^+_{\nu({-\frac{N_q}{2}+1},{-\frac{N_q}{2}+1})} & . & . & . & M^+_{\nu({-\frac{N_q}{2}+1}, {\frac{N_q}{2}})}\\
+%     . & . & . &  &  & . \\
+%     . & . &  & . &  & . \\
+%     . & . &  &  & . & . \\
+%     M^+_{\nu({\frac{N_q}{2}}, {-\frac{N_q}{2}})} & M^+_{\nu({\frac{N_q}{2}},{-\frac{N_q}{2}+1})} & . & . & . & M^+_{\nu({\frac{N_q}{2}}, {\frac{N_q}{2}})}\\
+%     \end{bmatrix}
+%     \begin{bmatrix}
+%         R_{(-\frac{N_q}{2},k)}\\
+%         R_{(-\frac{N_q}{2}+1,k)}\\
+%         .\\
+%         .\\
+%         .\\
+%         R_{(\frac{N_q}{2},k)}\\
+%     \end{bmatrix}
+%     =
+%     \begin{bmatrix}
+%         M^-_{\nu(-\frac{N_q}{2},k)}\\
+%         M^-_{\nu(-\frac{N_q}{2}+1,k)}\\
+%         .\\
+%         .\\
+%         .\\
+%         M^-_{\nu(\frac{N_q}{2},k)}\\
+%     \end{bmatrix}
+% \label{R_Matrix_equation}
+% \end{equation}
 
 Notice here that $N_q$ is used for indexing both parameter $q$ and $p$. This is due to the earlier statement that $N_q = N_p$. To use this to find $\boldsymbol{R}_{\nu}$, it is necessary to find a approximation of the $I$ integral defined by Eq. (\ref{I_integral}). Where this will be evaluated in $\hat{Q} =p_m - q_n $, for a total of $2 N_q$ discrete values ranging between $-Q = -N_q h_q$ and $Q = N_q h_q$.
 To find such an approximation, one can Taylor expand the expression the term $e^{i\gamma\zeta(x_1)}$, to only require the Fourier transform of the different orders of differentials of $\zeta(x_1)$.
